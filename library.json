@@ -1,5 +1,5 @@
 {
-  "name": "libnfc-esp32",
+  "name": "libnfc",
   "version": "1.0.0",
   "description": "ESP32 port of libnfc",
   "keywords": "iclass, hid, cipher, rfid",
@@ -35,6 +35,7 @@
   "platforms": ["*", "espressif32"],
     "build": {
     "flags": [
+      "-Iinclude",
       "-Ilibnfc/buses",
       "-Ilibnfc/chips",
       "-Ilibnfc/drivers",
