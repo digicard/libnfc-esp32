@@ -33,9 +33,7 @@
 #ifndef __NFC_BUS_UART_H__
 #  define __NFC_BUS_UART_H__
 
-#if !defined(_MSC_VER)
 #  include <sys/time.h>
-#endif
 
 #  include <stdio.h>
 #  include <string.h>
@@ -44,6 +42,8 @@
 
 #  include <nfc/nfc-types.h>
 
+#  include "chip/uart.h"
+
 // Define shortcut to types to make code more readable
 typedef void *serial_port;
 #  define INVALID_SERIAL_PORT (void*)(~1)
@@ -51,7 +51,7 @@ typedef void *serial_port;
 
 serial_port uart_open(const char *pcPortName);
 void    uart_close(const serial_port sp);
-void    uart_flush_input(const serial_port sp, bool wait);
+#define uart_flush_input(sp, wait) uart_flush_input((uart_port_t)sp)
 
 void    uart_set_speed(serial_port sp, const uint32_t uiPortSpeed);
 uint32_t uart_get_speed(const serial_port sp);

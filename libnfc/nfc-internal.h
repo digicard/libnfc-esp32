@@ -33,10 +33,7 @@
 #define __NFC_INTERNAL_H__
 
 #include <stdbool.h>
-#include <err.h>
-#if !defined(_MSC_VER)
-#  include <sys/time.h>
-#endif
+#include <sys/time.h>
 
 #include "nfc/nfc.h"
 
@@ -46,15 +43,13 @@
  * @macro HAL
  * @brief Execute corresponding driver function if exists.
  */
-#define HAL( FUNCTION, ... ) __extension__ ({int res; \
-  pnd->last_error = 0; \
+#define HAL( FUNCTION, ... ) pnd->last_error = 0; \
   if (pnd->driver->FUNCTION) { \
-    res = pnd->driver->FUNCTION( __VA_ARGS__ ); \
+    return pnd->driver->FUNCTION( __VA_ARGS__ ); \
   } else { \
     pnd->last_error = NFC_EDEVNOTSUPP; \
-    res = false; \
-  } \
-  res;})
+    return false; \
+  }
 
 #ifndef MIN
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))

@@ -1155,14 +1155,6 @@ pn53x_initiator_select_passive_target_ext(struct nfc_device *pnd,
         uint8_t abtRx[1];
         uint8_t *pbtInitData = (uint8_t *) "\x0b";
         size_t szInitData = 1;
-        
-        if ((res = pn53x_write_register(pnd, PN53X_REG_CIU_TxAuto, 0xef, 0x07)) < 0) // Initial RFOn, Tx2 RFAutoEn, Tx1 RFAutoEn
-          return res;
-        if ((res = pn53x_write_register(pnd, PN53X_REG_CIU_CWGsP, 0x3f, 0x3f)) < 0) // Conductance of the P-Driver
-          return res;
-        if ((res = pn53x_write_register(pnd, PN53X_REG_CIU_ModGsP, 0x3f, 0x12)) < 0) // Driver P-output conductance for the time of modulation
-          return res;
-        
         // Getting random Chip_ID
         if ((res = pn53x_initiator_transceive_bytes(pnd, abtInitiate, szInitiateLen, abtRx, sizeof(abtRx), timeout)) < 0) {
           if ((res == NFC_ERFTRANS) && (CHIP_DATA(pnd)->last_status_byte == 0x01)) { // Chip timeout
@@ -1216,7 +1208,7 @@ pn53x_initiator_select_passive_target_ext(struct nfc_device *pnd,
         // send ICLASS_ACTIVATE_ALL command - will get timeout as we don't expect response
         uint8_t abtReqt[] = { 0x0a }; // iClass ACTIVATE_ALL
         uint8_t abtAnticol[11];
-        if (pn53x_initiator_transceive_bytes(pnd, abtReqt, sizeof(abtReqt), NULL, 0, timeout) < 0) {
+        if ((res = pn53x_initiator_transceive_bytes(pnd, abtReqt, sizeof(abtReqt), NULL, 0, timeout)) < 0) {
           log_put(LOG_GROUP, LOG_CATEGORY, NFC_LOG_PRIORITY_DEBUG, "got expected timeout on iClass activate all");
           //if ((res == NFC_ERFTRANS) && (CHIP_DATA(pnd)->last_status_byte == 0x01)) { // Chip timeout
           //  continue;
@@ -2072,7 +2064,7 @@ static int pn53x_ISO14443A_Barcode_is_present(struct nfc_device *pnd)
     }
     uint8_t abtRx[PN53x_EXTENDED_FRAME__DATA_MAX_LEN];
     uint8_t abtRxPar[PN53x_EXTENDED_FRAME__DATA_MAX_LEN];
-    if (nfc_initiator_transceive_bits(pnd, NULL, 0, NULL, abtRx, sizeof(abtRx), abtRxPar) < 1) {
+    if ((ret = nfc_initiator_transceive_bits(pnd, NULL, 0, NULL, abtRx, sizeof(abtRx), abtRxPar)) < 1) {
       failures++;
     } else {
       nfc_device_set_property_bool(pnd, NP_HANDLE_CRC, true);
@@ -3837,7 +3829,7 @@ pn53x_data_new(struct nfc_device *pnd, const struct pn53x_io *io)
   memset(CHIP_DATA(pnd)->wb_mask, 0x00, PN53X_CACHE_REGISTER_SIZE);
 
   // Set default command timeout (350 ms)
-  CHIP_DATA(pnd)->timeout_command = 350;
+  CHIP_DATA(pnd)->timeout_command = 150;
 
   // Set default ATR timeout (103 ms)
   CHIP_DATA(pnd)->timeout_atr = 103;
