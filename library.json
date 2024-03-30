@@ -1,0 +1,54 @@
+{
+  "name": "libnfc-esp32",
+  "version": "1.0.0",
+  "description": "ESP32 port of libnfc",
+  "keywords": "iclass, hid, cipher, rfid",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/digicard/libnfc-esp32.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Alberto Lopez",
+      "email": "alopez@digicard.net",
+      "url": "https://github.com/AlbertoLopSie",
+      "maintainer": true
+    },
+    {
+      "name": "Jack Chen",
+      "email": "redchenjs@live.com",
+      "url": "https://github.com/redchenjs"
+    },
+    {
+      "name": "Many people at github.com/nfc-tools/libnfc",
+      "email": "nfc-tools@github.com",
+      "url": "https://github.com/nfc-tools/libnfc"
+    }
+  ],
+  "license": "GPLV2",
+  "homepage": "https://github.com/digicard/loclass",
+  "dependencies": {
+  },
+  "frameworks": ["*", "arduino", "espidf"],
+  "platforms": ["*", "espressif32"],
+    "build": {
+    "flags": [
+      "-Ilibnfc/buses",
+      "-Ilibnfc/chips",
+      "-Ilibnfc/drivers",
+      "-Wno-unused-variable", 
+      "-Wno-unused-but-set-variable",
+      "-Wno-unused-function",
+      "-Wno-format-extra-args",
+      "-Wno-format",
+      "-Wimplicit-fallthrough=0",
+      "-Wno-dangling-else",
+      "-Wno-stringop-truncation",
+      "-Wno-discarded-qualifiers"
+    ],
+    "srcDir": "./libnfc",
+    "srcFilter": ["+<**/*.c>"]
+  }  
+}
