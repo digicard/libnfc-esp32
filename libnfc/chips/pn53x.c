@@ -175,7 +175,16 @@ pn53x_transceive(struct nfc_device *pnd, const uint8_t *pbtTx, const size_t szTx
     }
   }
 
-  PNCMD_TRACE(pbtTx[0]);
+  // PNCMD_TRACE(pbtTx[0]);   // Esto cuelga la task x timeout del WDT
+  // do { 
+  //   for (size_t i = 0; i < (sizeof(pn53x_commands)/sizeof(pn53x_command)); i++) { 
+  //     if ( pbtTx[0] == pn53x_commands[i].ui8Code ) { 
+  //       log_put( LOG_GROUP, LOG_CATEGORY, NFC_LOG_PRIORITY_DEBUG, "%s", pn53x_commands[i].abtCommandText ); 
+  //       break; 
+  //     } 
+  //   } 
+  // } while(0);
+
   if (timeout > 0) {
     log_put(LOG_GROUP, LOG_CATEGORY, NFC_LOG_PRIORITY_DEBUG, "Timeout value: %d", timeout);
   } else if (timeout == 0) {
