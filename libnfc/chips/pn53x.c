@@ -3838,7 +3838,7 @@ pn53x_data_new(struct nfc_device *pnd, const struct pn53x_io *io)
   memset(CHIP_DATA(pnd)->wb_mask, 0x00, PN53X_CACHE_REGISTER_SIZE);
 
   // Set default command timeout (350 ms)
-  CHIP_DATA(pnd)->timeout_command = 150;
+  CHIP_DATA(pnd)->timeout_command = 350;
 
   // Set default ATR timeout (103 ms)
   CHIP_DATA(pnd)->timeout_atr = 103;
